@@ -38,17 +38,6 @@ export default function Dashboard() {
   }
 
   function newPdf() {
-    const listContactsKeys = Object.keys(contacts![0]);
-    const listContactsValues = contacts!.map((contact) =>
-      Object.values(contact)
-    );
-
-    var generateData = function () {
-      var result: any = [];
-      contacts!.map((contact) => result.push(Object.assign({}, contact)));
-      return result;
-    };
-
     const doc = new jsPDF({ orientation: "p" });
 
     doc.setFontSize(32);

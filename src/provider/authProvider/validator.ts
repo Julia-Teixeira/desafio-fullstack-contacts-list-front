@@ -11,7 +11,7 @@ export const schemaRegister = z
   .object({
     full_name: z.string().nonempty("Nome completo é obrigatório"),
     phone: z.string().nonempty("Phone é obrigatório"),
-    image: z.any(z.instanceof(File)).optional(),
+    image: z.any().optional(),
     email: z.string().email("Deve ser um e-mail"),
     password: z.string().nonempty("Senha é obrigatória"),
     confirmPassword: z.string().nonempty("Confirmar senha é obrigatória"),
