@@ -1,10 +1,9 @@
-import { DeepPartial } from "react-hook-form";
 import { z } from "zod";
 
 export const schemaContactsRegister = z.object({
   full_name: z.string().nonempty("Nome completo é obrigatório"),
   phone: z.string().nonempty("Phone é obrigatório"),
-  image: z.string().optional(),
+  image: z.any(z.instanceof(File)).optional(),
   email: z.string().email("Deve ser um e-mail"),
 });
 

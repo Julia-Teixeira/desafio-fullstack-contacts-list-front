@@ -17,7 +17,7 @@ interface ModalEditClientProps {
 }
 
 export function ModalEditClients({ isOpen, setIsOpen }: ModalEditClientProps) {
-  const { client, getClientData, editClient } = useClient();
+  const { client, getClientData, editClient, loading } = useClient();
   const {
     register,
     handleSubmit,
@@ -29,7 +29,9 @@ export function ModalEditClients({ isOpen, setIsOpen }: ModalEditClientProps) {
   function contactEdit(data: RegisterData) {
     editClient(data);
     getClientData();
-    setIsOpen(false);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 2000);
   }
 
   return (
@@ -74,12 +76,10 @@ export function ModalEditClients({ isOpen, setIsOpen }: ModalEditClientProps) {
             error={errors?.phone?.message}
           />
           <Input
-            defaultValue={client!.image}
-            type="text"
+            type="file"
             id="image"
             label="Imagem"
             width="w-[379px]"
-            placeholder="Url da imagem"
             register={register("image")}
             error={errors?.image?.message}
           />
@@ -105,8 +105,9 @@ export function ModalEditClients({ isOpen, setIsOpen }: ModalEditClientProps) {
           <Button
             text="Alterar"
             w="w-[379px]"
-            color="--color-purple-600"
+            color="bg-[--color-purple-600]"
             type="submit"
+            loading={loading}
           />
         </form>
       </div>

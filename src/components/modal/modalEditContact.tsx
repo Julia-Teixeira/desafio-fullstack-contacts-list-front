@@ -22,7 +22,7 @@ export function ModalEditContact({
   setIsOpen,
   contact,
 }: ModalEditContactProps) {
-  const { getClientData, editContact } = useClient();
+  const { getClientData, editContact, loading } = useClient();
   const {
     register,
     handleSubmit,
@@ -34,7 +34,9 @@ export function ModalEditContact({
   function contactEdit(data: ContactRegisterData) {
     editContact(contact.id, data);
     getClientData();
-    setIsOpen(false);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 2000);
   }
 
   return (
@@ -79,20 +81,19 @@ export function ModalEditContact({
             error={errors?.phone?.message}
           />
           <Input
-            defaultValue={contact.image}
-            type="text"
+            type="file"
             id="image"
             label="Imagem"
             width="w-[379px]"
-            placeholder="Url da imagem"
             register={register("image")}
             error={errors?.image?.message}
           />
           <Button
             text="Alterar"
             w="w-[379px]"
-            color="--color-purple-600"
+            color="bg-[--color-purple-600]"
             type="submit"
+            loading={loading}
           />
         </form>
       </div>

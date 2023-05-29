@@ -20,7 +20,9 @@ export function ModalDeleteContact({
   function deleteContacts() {
     deleteContact(contact.id);
     getClientData();
-    setIsOpen(false);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 2000);
   }
   return (
     <ModalContainer
@@ -38,14 +40,14 @@ export function ModalDeleteContact({
             type="button"
             onClick={() => deleteContacts()}
             w="w-[160px]"
-            color="--color-purple-600"
+            color="bg-[--color-purple-600]"
           />
           <Button
             text="Não"
             type="button"
             onClick={() => setIsOpen(false)}
             w="w-[160px]"
-            color="--color-purple-600"
+            color="bg-[--color-purple-600]"
           />
         </div>
       </div>

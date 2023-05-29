@@ -2,6 +2,9 @@
 import { api } from "@/service/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AxiosError } from "axios";
 
 export const AuthContext = createContext<AuthContextValues>(
   {} as AuthContextValues
@@ -37,20 +40,64 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       api.defaults.headers.common.authorization = `Bearer ${token}`;
       localStorage.setItem("your-contactList:token", token);
 
-      router.push("/dashboard");
-    } catch (error) {
-      console.error(error);
+      toast.success("Login feito com sucesso!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 3000);
+    } catch (error: any) {
+      toast.error("Email ou senha incorretos", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
   async function registerClient(data: RegisterData) {
     try {
       const response = await api.post("/client", data);
-      const { token } = response.data;
 
-      router.push("/");
-    } catch (error) {
-      console.error(error);
+      toast.success("Cadastro feito com sucesso!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    } catch (error: any) {
+      const err = error as AxiosError;
+
+      toast.error(err.response?.data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 

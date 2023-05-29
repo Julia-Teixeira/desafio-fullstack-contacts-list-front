@@ -11,6 +11,9 @@ import {
 import { useRouter } from "next/navigation";
 import { ContactRegisterData } from "./validator";
 import { RegisterData } from "@/provider/authProvider/validator";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AxiosError } from "axios";
 
 interface ClientContextValues {
   client: Client | null;
@@ -68,7 +71,29 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
   async function editClient(data: RegisterData) {
     try {
       await api.patch(`/client`, data);
-    } catch (error) {
+      toast.success("Usuário editado com sucesso!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error: any) {
+      const err = error as AxiosError;
+
+      toast.error(err.response?.data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -78,7 +103,29 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
   async function deleteContact(id: string) {
     try {
       await api.delete(`/contact/${id}`);
-    } catch (error) {
+      toast.success("Contato deletado com sucesso!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error: any) {
+      const err = error as AxiosError;
+
+      toast.error(err.response?.data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -87,8 +134,29 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
 
   async function registerContact(data: ContactRegisterData) {
     try {
-      await api.post(`/contact/`, data);
-    } catch (error) {
+      const response = await api.post(`/contact/`, data);
+      toast.success("Contato cadastrado com sucesso!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error: any) {
+      const err = error as AxiosError;
+      toast.error(err.response?.data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -98,7 +166,29 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
   async function editContact(id: string, data: ContactRegisterData) {
     try {
       await api.patch(`/contact/${id}`, data);
-    } catch (error) {
+      toast.success("Contato editado com sucesso!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (error: any) {
+      const err = error as AxiosError;
+
+      toast.error(err.response?.data.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.error(error);
     } finally {
       setLoading(false);

@@ -1,5 +1,10 @@
 import { InputHTMLAttributes } from "react";
-import { UseFormRegister, UseFormRegisterReturn } from "react-hook-form";
+import {
+  FieldError,
+  FieldErrorsImpl,
+  Merge,
+  UseFormRegisterReturn,
+} from "react-hook-form";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -7,7 +12,11 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: string;
   width: string;
   register: UseFormRegisterReturn;
-  error: string | undefined;
+  error:
+    | string
+    | FieldError
+    | Merge<FieldError, FieldErrorsImpl<any>>
+    | undefined;
 }
 
 export default function Input({
@@ -31,7 +40,9 @@ export default function Input({
         {...rest}
         {...register}
       />
-      {error ? <span className="text-red-700">{error}</span> : null}
+      {error && typeof error === "string" ? (
+        <span className="text-red-700">{error}</span>
+      ) : null}
     </fieldset>
   );
 }

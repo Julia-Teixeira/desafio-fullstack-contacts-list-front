@@ -13,6 +13,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { FaUserEdit, FaFilePdf, FaUserPlus } from "react-icons/fa";
 import { jsPDF } from "jspdf";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export default function Dashboard() {
   const { client, contacts, loading, setClient, getClientData } = useClient();
@@ -101,35 +103,25 @@ export default function Dashboard() {
           <h1 className="text-purple800 text-4xl font-semibold ">Contatos</h1>
         </div>
 
-        <div className="flex gap-2.5 items-center ">
-          <div className="flex flex-col">
-            <h2 className="text-purple800 text-2xl">{client?.full_name}</h2>
-            <p className="text-right cursor-pointer" onClick={() => logOut()}>
-              Sair
-            </p>
-          </div>
-          <div className="bg-purple-800 rounded-full w-[70px] h-[70px]" />
-          {/* <Image
-            alt="Agenda"
-            src={client!?.image}
-            width={68}
-            height={68}
-            className="w-[68px] h-[68px]"
-          /> */}
+        <div className="flex gap-2.5 items-center  ">
+          <p
+            className="text-right cursor-pointer font-semibold"
+            onClick={() => logOut()}
+          >
+            Sair
+          </p>
         </div>
       </header>
       <div className="flex gap-12 w-[80%]">
         <article className="w-[404px] h-[90vh] flex flex-col bg-purple-100/30 rounded-r-3xl items-center ">
-          <div
-            className={`bg-purple-800 rounded-[100px] w-[224px] h-[300px] mt-[30px]`}
-          >
-            {/* <Image
-              alt={`Imagem de perfil de ${client!?.full_name}`}
-              src={client!?.image}
-              width={100}
-              height={100}
-            /> */}
-          </div>
+          <Image
+            alt={`Imagem de perfil de ${client!?.full_name}`}
+            src={client!?.image}
+            width={224}
+            height={300}
+            className="mt-[20px] w-[auto] h-[auto]"
+          />
+
           <p className="text-purple800 text-2xl mt-[10px]">
             {client?.full_name}
           </p>
@@ -140,7 +132,7 @@ export default function Dashboard() {
             <Button
               text="Editar Conta"
               type="button"
-              color="--color-purple-500"
+              color="bg-[--color-purple-500]"
               onClick={() => setIsOpenEditClient(true)}
               w="w-[310px]"
             >
@@ -149,7 +141,7 @@ export default function Dashboard() {
             <Button
               text="Criar novo contato"
               type="button"
-              color="--color-purple-500"
+              color="bg-[--color-purple-500]"
               onClick={() => setIsOpenCreate(true)}
               w="w-[310px]"
             >
@@ -158,7 +150,7 @@ export default function Dashboard() {
             <Button
               text="Gerar um relatório"
               type="button"
-              color="--color-purple-500"
+              color="bg-[--color-purple-500]"
               w="w-[310px]"
               onClick={() => newPdf()}
             >
@@ -183,6 +175,17 @@ export default function Dashboard() {
           )}
         </article>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </main>
   );
 }

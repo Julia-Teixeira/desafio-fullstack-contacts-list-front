@@ -11,6 +11,8 @@ import {
   RegisterData,
   schemaRegister,
 } from "@/provider/authProvider/validator";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export default function Register() {
   const { registerClient } = useAuth();
@@ -73,7 +75,7 @@ export default function Register() {
           />
 
           <Input
-            type="text"
+            type="file"
             id="image"
             label="Imagem"
             width="w-[379px]"
@@ -105,24 +107,35 @@ export default function Register() {
           <Button
             text="Registrar"
             type="submit"
-            w="w-[310px]"
-            color="--color-purple-600"
+            w="w-[379px]"
+            color="bg-[--color-purple-600]"
           />
         </form>
 
-        <div className="w-[379px] h-[1px] bg-white mt-[40px]" />
-        <p className="text-purple800 text-2xl text-center mt-[40px] mb-[23px]">
+        <div className="w-[379px] h-[1px] bg-white mt-[20px]" />
+        <p className="text-purple800 text-2xl text-center mt-[10px] mb-[23px]">
           Já possui conta?
         </p>
-        <Link href="/">
+        <Link href="/" className="">
           <Button
             text="Ir para o Login"
             type="button"
-            w="w-[310px]"
-            color="--color-purple-600"
+            w="w-[379px]"
+            color="bg-[--color-purple-600]"
           />
         </Link>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </main>
   );
 }

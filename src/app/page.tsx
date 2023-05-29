@@ -9,9 +9,11 @@ import { schema } from "@/provider/authProvider/validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export default function Login() {
-  const { signIn } = useAuth();
+  const { signIn, loading } = useAuth();
   const router = useRouter();
   const {
     register,
@@ -55,7 +57,8 @@ export default function Login() {
             type="submit"
             disabled={!isValid}
             w="w-[374px]"
-            color="--color-purple-600"
+            color="bg-[--color-purple-600]"
+            loading={loading}
           />
         </form>
 
@@ -69,7 +72,7 @@ export default function Login() {
             text="Criar sua conta"
             type="button"
             w="w-[374px]"
-            color="--color-purple-600"
+            color="bg-[--color-purple-600]"
           />
         </Link>
       </div>
@@ -83,6 +86,17 @@ export default function Login() {
           gerenciar seus contatos
         </p>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </main>
   );
 }

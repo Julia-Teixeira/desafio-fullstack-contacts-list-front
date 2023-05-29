@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SetStateAction } from "react";
 import { Dispatch } from "react";
 import { FaUserEdit, FaTrash } from "react-icons/fa";
@@ -28,7 +29,12 @@ export default function Card({
   return (
     <div className="px-[20px] flex justify-between bg-purple-100 w-[100%] h-[102px] items-center rounded-lg hover:bg-purple-300">
       <div className="flex items-center gap-[22px]">
-        <div className="bg-purple-800 rounded-full w-[70px] h-[70px]" />
+        <Image
+          alt={`Imagem de perfil de ${contact!?.full_name}`}
+          src={contact!?.image}
+          width={70}
+          height={70}
+        />
         <div className="flex items-center flex-col text-purple800 text-2xl">
           <p>{contact.full_name}</p>
         </div>

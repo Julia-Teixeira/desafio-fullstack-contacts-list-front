@@ -23,17 +23,19 @@ export function ModalCreateContacts({
   const {
     register,
     handleSubmit,
-    formState: { isValid, errors },
+    formState: { errors },
   } = useForm<ContactRegisterData>({
     resolver: zodResolver(schemaContactsRegister),
   });
 
-  const { getClientData, registerContact } = useClient();
+  const { getClientData, registerContact, loading } = useClient();
 
   function createContact(data: ContactRegisterData) {
-    registerContact(data);
+    registerContact({ ...data, image: data.image[0] });
     getClientData();
-    setIsOpen(false);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 2000);
   }
 
   return (
@@ -75,19 +77,19 @@ export function ModalCreateContacts({
             error={errors?.phone?.message}
           />
           <Input
-            type="text"
+            type="file"
             id="image"
             label="Imagem"
             width="w-[379px]"
-            placeholder="Url da imagem"
             register={register("image")}
             error={errors?.image?.message}
           />
           <Button
             text="Cadastrar"
             w="w-[379px]"
-            color="--color-purple-600"
+            color="bg-[--color-purple-600]"
             type="submit"
+            loading={loading}
           />
         </form>
       </div>

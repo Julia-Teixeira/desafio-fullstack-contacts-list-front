@@ -1,5 +1,5 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { ButtonHTMLAttributes } from "react";
+import ReactLoading from "react-loading";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
@@ -8,6 +8,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: string;
   func?: void;
   w: string;
+  loading?: boolean;
 }
 export default function Button({
   text,
@@ -15,15 +16,26 @@ export default function Button({
   children,
   color,
   w,
+  loading,
   ...rest
 }: ButtonProps) {
   return (
     <button
       type={type}
-      className={`flex items-center  justify-evenly text-2xl ${w} h-[50px] bg-[${color}] rounded-md text-white`}
+      className={`flex items-center justify-evenly text-2xl ${w} h-[50px] ${color} rounded-md text-white`}
       {...rest}
     >
-      {children} {text}
+      {children}
+      {loading === true ? (
+        <ReactLoading
+          type="bubbles"
+          color="white"
+          height={"20px"}
+          width={"20px"}
+        />
+      ) : (
+        text
+      )}
     </button>
   );
 }
