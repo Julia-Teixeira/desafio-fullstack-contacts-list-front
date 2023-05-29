@@ -84,7 +84,7 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
     } catch (error: any) {
       const err = error as AxiosError;
 
-      toast.error(err.response?.data.message, {
+      toast.error(err.message, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -116,7 +116,7 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
     } catch (error: any) {
       const err = error as AxiosError;
 
-      toast.error(err.response?.data.message, {
+      toast.error(err.message, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -147,7 +147,7 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
       });
     } catch (error: any) {
       const err = error as AxiosError;
-      toast.error(err.response?.data.message, {
+      toast.error(err.message, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -179,7 +179,7 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
     } catch (error: any) {
       const err = error as AxiosError;
 
-      toast.error(err.response?.data.message, {
+      toast.error(err.message, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
