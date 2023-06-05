@@ -24,20 +24,19 @@ export default function Login() {
   });
 
   return (
-    <main className="flex min-h-screen items-center justify-evenly p-24">
-      <div className="w-128 bg-purple-300/50  h-130 rounded-2xl flex flex-col items-center pt-[36px]">
-        <h2 className="text-purple800 text-4xl font-semibold">
+    <main className="flex min-h-screen items-center justify-evenly p-4">
+      <div className="min-w-[300px] w-full max-w-[30rem] bg-purple-300/50 h-max rounded-2xl flex flex-col items-center p-5 md:p-3">
+        <h2 className="text-purple800 text-2xl md:text-4xl font-semibold pt-4">
           Bem vindo de volta!
         </h2>
         <form
           onSubmit={handleSubmit(signIn)}
-          className="flex flex-col gap-y-10 mt-[31px]"
+          className="flex max-w-[380px] w-full flex-col gap-y-3 mt-[31px] px-4"
         >
           <Input
             type="text"
             id="email"
             label="Email"
-            width="w-[379px]"
             placeholder="email@email.com"
             register={register("email", { required: true })}
             error={errors?.email?.message}
@@ -46,7 +45,6 @@ export default function Login() {
             type="password"
             id="password"
             label="Senha"
-            width="w-[379px]"
             placeholder="***********"
             register={register("password", { required: true })}
             error={errors?.password?.message}
@@ -56,31 +54,31 @@ export default function Login() {
             text="Entrar"
             type="submit"
             disabled={!isValid}
-            w="w-[374px]"
             color="bg-[--color-purple-600]"
             loading={loading}
           />
         </form>
 
-        <div className="w-[379px] h-[1px] bg-white mt-[40px]" />
-        <p className="text-purple800 text-2xl text-center mt-[40px] mb-[23px]">
-          Ainda não possui uma <br />
-          conta?
-        </p>
-        <Link href="/register">
-          <Button
-            text="Criar sua conta"
-            type="button"
-            w="w-[374px]"
-            color="bg-[--color-purple-600]"
-          />
-        </Link>
+        <div className="w-[300px] h-[1px] bg-white mt-6" />
+        <div className="max-w-[380px] w-full flex flex-col items-center px-4">
+          <p className="text-purple800 text-xl md:text-2xl text-center my-6">
+            Ainda não possui uma <br />
+            conta?
+          </p>
+          <Link href="/register" className="w-full">
+            <Button
+              text="Criar sua conta"
+              type="button"
+              color="bg-[--color-purple-600]"
+            />
+          </Link>
+        </div>
       </div>
-      <div className="flex flex-col gap-5 items-center">
+      <div className="hidden md:flex flex-col gap-5 items-center">
         <h2 className="text-purple800 text-4xl font-semibold">
           Lista de Contatos
         </h2>
-        <Image alt="Imagem de uma agenda" src={img}></Image>
+        <Image alt="Imagem de uma agenda" src={img} width={370} />
         <p className="text-white text-3.5xl">
           Simplifique a forma de <br />
           gerenciar seus contatos
@@ -88,7 +86,7 @@ export default function Login() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

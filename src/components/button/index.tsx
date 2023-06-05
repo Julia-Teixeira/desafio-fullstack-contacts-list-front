@@ -1,13 +1,11 @@
 import { ButtonHTMLAttributes } from "react";
-import ReactLoading from "react-loading";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  text: string;
+  text?: string;
   type: "submit" | "button";
   children?: React.ReactNode;
   color?: string;
   func?: void;
-  w: string;
   loading?: boolean;
 }
 export default function Button({
@@ -15,27 +13,17 @@ export default function Button({
   type,
   children,
   color,
-  w,
   loading,
   ...rest
 }: ButtonProps) {
   return (
     <button
       type={type}
-      className={`flex items-center justify-evenly text-2xl ${w} h-[50px] ${color} rounded-md text-white`}
+      className={`flex items-center justify-evenly text-xl md:text-lg lg:text-2xl min-w-[200px] max-w-[379px] w-full h-[50px] ${color} rounded-md text-white`}
       {...rest}
     >
       {children}
-      {loading === true ? (
-        <ReactLoading
-          type="bubbles"
-          color="white"
-          height={"20px"}
-          width={"20px"}
-        />
-      ) : (
-        text
-      )}
+      {text}
     </button>
   );
 }

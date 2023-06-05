@@ -24,31 +24,30 @@ export default function Register() {
     resolver: zodResolver(schemaRegister),
   });
   return (
-    <main className="flex min-h-screen items-center justify-evenly p-24">
-      <div className="flex flex-col gap-5 items-center">
+    <main className="flex min-h-screen items-center justify-evenly p-4">
+      <div className="hidden md:flex flex-col gap-5 items-center">
         <h2 className="text-purple800 text-4xl font-semibold">
           Lista de Contatos
         </h2>
-        <Image alt="Imagem de uma agenda" src={img}></Image>
+        <Image alt="Imagem de uma agenda" src={img} width={370} />
         <p className="text-white text-3.5xl">
           Simplifique a forma de <br />
           gerenciar seus contatos
         </p>
       </div>
 
-      <div className="w-128 bg-purple-300/50  h-[899px] rounded-2xl flex flex-col items-center pt-[36px]">
-        <h2 className="text-purple800 text-4xl font-semibold">
+      <div className="min-w-[300px] w-full max-w-[30rem] bg-purple-300/50 h-max rounded-2xl flex flex-col items-center p-5 md:p-3">
+        <h2 className="text-purple800 text-2xl md:text-4xl font-semibold pt-4">
           Crie sua conta
         </h2>
         <form
           onSubmit={handleSubmit(registerClient)}
-          className="flex flex-col gap-y-6 mt-[31px]"
+          className="flex max-w-[380px] w-full flex-col gap-y-3 mt-[31px] px-4"
         >
           <Input
             type="text"
             id="fullname"
             label="Nome Completo"
-            width="w-[379px]"
             placeholder="Nome completo"
             register={register("full_name", { required: true })}
             error={errors?.full_name?.message}
@@ -58,7 +57,6 @@ export default function Register() {
             type="text"
             id="email"
             label="Email"
-            width="w-[379px]"
             placeholder="email@email.com"
             register={register("email", { required: true })}
             error={errors?.email?.message}
@@ -68,7 +66,6 @@ export default function Register() {
             type="text"
             id="phone"
             label="Telefone"
-            width="w-[379px]"
             placeholder="(00) 0 0000-0000"
             register={register("phone", { required: true })}
             error={errors?.phone?.message}
@@ -78,7 +75,6 @@ export default function Register() {
             type="file"
             id="image"
             label="Imagem"
-            width="w-[379px]"
             placeholder="Url da imagem"
             register={register("image", { required: true })}
             error={errors?.image?.message}
@@ -88,7 +84,6 @@ export default function Register() {
             type="password"
             id="password"
             label="Senha"
-            width="w-[379px]"
             placeholder="***********"
             register={register("password", { required: true })}
             error={errors?.password?.message}
@@ -98,7 +93,6 @@ export default function Register() {
             type="password"
             id="confirm_password"
             label="Confirmar senha"
-            width="w-[379px]"
             placeholder="***********"
             register={register("confirmPassword", { required: true })}
             error={errors?.confirmPassword?.message}
@@ -107,23 +101,23 @@ export default function Register() {
           <Button
             text="Registrar"
             type="submit"
-            w="w-[379px]"
             color="bg-[--color-purple-600]"
           />
         </form>
 
-        <div className="w-[379px] h-[1px] bg-white mt-[20px]" />
-        <p className="text-purple800 text-2xl text-center mt-[10px] mb-[23px]">
-          Já possui conta?
-        </p>
-        <Link href="/" className="">
-          <Button
-            text="Ir para o Login"
-            type="button"
-            w="w-[379px]"
-            color="bg-[--color-purple-600]"
-          />
-        </Link>
+        <div className="w-[300px] h-[1px] bg-white mt-6" />
+        <div className="max-w-[380px] w-full flex flex-col items-center px-4">
+          <p className="text-purple800 text-xl md:text-2xl text-center my-6">
+            Já possui conta?
+          </p>
+          <Link href="/" className="w-full">
+            <Button
+              text="Ir para o Login"
+              type="button"
+              color="bg-[--color-purple-600]"
+            />
+          </Link>
+        </div>
       </div>
       <ToastContainer
         position="top-right"

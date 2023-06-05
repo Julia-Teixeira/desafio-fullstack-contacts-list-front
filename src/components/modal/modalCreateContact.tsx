@@ -28,14 +28,10 @@ export function ModalCreateContacts({
     resolver: zodResolver(schemaContactsRegister),
   });
 
-  const { getClientData, registerContact, loading } = useClient();
+  const { registerContact, loading } = useClient();
 
   function createContact(data: ContactRegisterData) {
-    registerContact({ ...data, image: data.image[0] });
-    getClientData();
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 2000);
+    registerContact({ ...data, image: data.image[0] }, setIsOpen);
   }
 
   return (
@@ -53,7 +49,6 @@ export function ModalCreateContacts({
             type="text"
             id="full_name"
             label="Nome completo"
-            width="w-[379px]"
             placeholder="Nome completo"
             register={register("full_name")}
             error={errors?.full_name?.message}
@@ -62,7 +57,6 @@ export function ModalCreateContacts({
             type="email"
             id="email"
             label="Email"
-            width="w-[379px]"
             placeholder="email@email.com"
             register={register("email")}
             error={errors?.email?.message}
@@ -71,7 +65,6 @@ export function ModalCreateContacts({
             type="text"
             id="phone"
             label="Telefone"
-            width="w-[379px]"
             placeholder="(00) 0 0000-0000"
             register={register("phone")}
             error={errors?.phone?.message}
@@ -80,13 +73,11 @@ export function ModalCreateContacts({
             type="file"
             id="image"
             label="Imagem"
-            width="w-[379px]"
             register={register("image")}
             error={errors?.image?.message}
           />
           <Button
             text="Cadastrar"
-            w="w-[379px]"
             color="bg-[--color-purple-600]"
             type="submit"
             loading={loading}

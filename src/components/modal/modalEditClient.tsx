@@ -27,11 +27,7 @@ export function ModalEditClients({ isOpen, setIsOpen }: ModalEditClientProps) {
   });
 
   function contactEdit(data: RegisterData) {
-    editClient(data);
-    getClientData();
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 2000);
+    editClient({ ...data, image: data.image[0] }, setIsOpen);
   }
 
   return (
@@ -40,71 +36,71 @@ export function ModalEditClients({ isOpen, setIsOpen }: ModalEditClientProps) {
       setIsOpen={setIsOpen}
       titleModal="Editar Usuário"
     >
-      <div className="flex flex-col gap-[10px]">
+      <div className="flex flex-col gap-2">
         <form
-          className="flex flex-col gap-[10px]"
+          className="flex flex-col gap-2 items-center"
           onSubmit={handleSubmit(contactEdit)}
         >
-          <Input
-            defaultValue={client!.full_name}
-            type="text"
-            id="full_name"
-            label="Nome completo"
-            width="w-[379px]"
-            placeholder="Nome completo"
-            register={register("full_name")}
-            error={errors?.full_name?.message}
-          />
-          <Input
-            defaultValue={client!.email}
-            type="email"
-            id="email"
-            label="Email"
-            width="w-[379px]"
-            placeholder="email@email.com"
-            register={register("email")}
-            error={errors?.email?.message}
-          />
-          <Input
-            defaultValue={client!.phone}
-            type="text"
-            id="phone"
-            label="Telefone"
-            width="w-[379px]"
-            placeholder="(00) 0 0000-0000"
-            register={register("phone")}
-            error={errors?.phone?.message}
-          />
-          <Input
-            type="file"
-            id="image"
-            label="Imagem"
-            width="w-[379px]"
-            register={register("image")}
-            error={errors?.image?.message}
-          />
-          <Input
-            type="password"
-            id="password"
-            label="Senha"
-            width="w-[379px]"
-            placeholder="***********"
-            register={register("password", { required: true })}
-            error={errors?.password?.message}
-          />
+          <div className="flex flex-col lg:flex-row gap-6 lg:w-full">
+            <div className="lg:w-1/2">
+              <Input
+                defaultValue={client!.full_name}
+                type="text"
+                id="full_name"
+                label="Nome completo"
+                placeholder="Nome completo"
+                register={register("full_name")}
+                error={errors?.full_name?.message}
+              />
+              <Input
+                defaultValue={client!.email}
+                type="email"
+                id="email"
+                label="Email"
+                placeholder="email@email.com"
+                register={register("email")}
+                error={errors?.email?.message}
+              />
+              <Input
+                defaultValue={client!.phone}
+                type="text"
+                id="phone"
+                label="Telefone"
+                placeholder="(00) 0 0000-0000"
+                register={register("phone")}
+                error={errors?.phone?.message}
+              />
+            </div>
+            <div>
+              <Input
+                type="file"
+                id="image"
+                label="Imagem"
+                register={register("image")}
+                error={errors?.image?.message}
+              />
+              <Input
+                type="password"
+                id="password"
+                label="Senha"
+                placeholder="***********"
+                register={register("password", { required: true })}
+                error={errors?.password?.message}
+              />
 
-          <Input
-            type="password"
-            id="confirm_password"
-            label="Confirmar senha"
-            width="w-[379px]"
-            placeholder="***********"
-            register={register("confirmPassword", { required: true })}
-            error={errors?.confirmPassword?.message}
-          />
+              <Input
+                type="password"
+                id="confirm_password"
+                label="Confirmar senha"
+                placeholder="***********"
+                register={register("confirmPassword", { required: true })}
+                error={errors?.confirmPassword?.message}
+              />
+            </div>
+          </div>
+
           <Button
             text="Alterar"
-            w="w-[379px]"
             color="bg-[--color-purple-600]"
             type="submit"
             loading={loading}

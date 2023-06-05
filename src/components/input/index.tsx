@@ -10,7 +10,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   id: string;
   type: string;
-  width: string;
   register: UseFormRegisterReturn;
   error:
     | string
@@ -23,20 +22,19 @@ export default function Input({
   id,
   label,
   type,
-  width,
   register,
   error,
   ...rest
 }: InputProps) {
   return (
-    <fieldset className="flex flex-col">
-      <label htmlFor={id} className="font-semibold font-1xl">
+    <fieldset className="flex flex-col w-full max-w-[379px]">
+      <label htmlFor={id} className="font-semibold text-base md:text-lg">
         {label}:
       </label>
       <input
         type={type}
         id={id}
-        className={`${width} h-[50px] rounded-md text-purple800 pl-4`}
+        className={`w-full h-10 md:h-11 rounded-md text-purple800 pl-4`}
         {...rest}
         {...register}
       />

@@ -10,6 +10,7 @@ import {
 } from "@/provider/clientProvider/validator";
 import Button from "../button";
 import { useClient } from "@/provider/clientProvider";
+import ReactLoading from "react-loading";
 
 interface ModalEditContactProps {
   isOpen: boolean;
@@ -22,7 +23,7 @@ export function ModalEditContact({
   setIsOpen,
   contact,
 }: ModalEditContactProps) {
-  const { getClientData, editContact, loading } = useClient();
+  const { editContact, loading, setLoading } = useClient();
   const {
     register,
     handleSubmit,
@@ -32,11 +33,7 @@ export function ModalEditContact({
   });
 
   function contactEdit(data: ContactRegisterData) {
-    editContact(contact.id, data);
-    getClientData();
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 2000);
+    editContact(contact.id, { ...data, image: data.image[0] }, setIsOpen);
   }
 
   return (
@@ -55,7 +52,6 @@ export function ModalEditContact({
             type="text"
             id="full_name"
             label="Nome completo"
-            width="w-[379px]"
             placeholder="Nome completo"
             register={register("full_name")}
             error={errors?.full_name?.message}
@@ -65,7 +61,6 @@ export function ModalEditContact({
             type="email"
             id="email"
             label="Email"
-            width="w-[379px]"
             placeholder="email@email.com"
             register={register("email")}
             error={errors?.email?.message}
@@ -75,7 +70,6 @@ export function ModalEditContact({
             type="text"
             id="phone"
             label="Telefone"
-            width="w-[379px]"
             placeholder="(00) 0 0000-0000"
             register={register("phone")}
             error={errors?.phone?.message}
@@ -84,17 +78,21 @@ export function ModalEditContact({
             type="file"
             id="image"
             label="Imagem"
-            width="w-[379px]"
             register={register("image")}
             error={errors?.image?.message}
           />
-          <Button
-            text="Alterar"
-            w="w-[379px]"
-            color="bg-[--color-purple-600]"
-            type="submit"
-            loading={loading}
-          />
+          <Button color="bg-[--color-purple-600]" type="submit">
+            {loading ? (
+              <ReactLoading
+                type="bubbles"
+                color="white"
+                height={"20px"}
+                width={"20px"}
+              />
+            ) : (
+              "Alterar Dados"
+            )}
+          </Button>
         </form>
       </div>
     </ModalContainer>

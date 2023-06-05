@@ -2,8 +2,9 @@
 import { api } from "@/service/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Toast from "@/components/toast";
+import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 
 export const AuthContext = createContext<AuthContextValues>(
@@ -33,73 +34,51 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   async function signIn(data: LoginData) {
-    try {
-      const response = await api.post("/login", data);
-      const { token } = response.data;
-
-      api.defaults.headers.common.authorization = `Bearer ${token}`;
-      localStorage.setItem("your-contactList:token", token);
-
-      toast.success("Login feito com sucesso!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 3000);
-    } catch (error: any) {
-      toast.error("Email ou senha incorretos", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    }
+    await api
+      .post("/login", data)
+      .then((res) => {
+        api.defaults.headers.common.authorization = `Bearer ${res.data.token}`;
+        localStorage.setItem("your-contactList:token", res.data.token);
+        Toast({ msg: "Login feito com sucesso!", isSuccess: true });
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 1000);
+      })
+      .catch((err) => {
+        console.error(err.response.data.message);
+        Toast({ msg: err.response.data.message });
+      })
+      .finally(() => setLoading(false));
   }
 
   async function registerClient(data: RegisterData) {
-    try {
-      const response = await api.post("/client", data);
-
-      toast.success("Cadastro feito com sucesso!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      setTimeout(() => {
-        router.push("/");
-      }, 3000);
-    } catch (error: any) {
-      const err = error as AxiosError;
-
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      console.error(error);
-    }
+    const fd = new FormData();
+    fd.append("full_name", data.full_name);
+    fd.append("phone", data.phone);
+    fd.append("email", data.email);
+    fd.append("password", data.password);
+    fd.append("image", data.image![0]);
+    toast.promise(
+      api.post(`/client`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
+      {
+        pending: "Cadastrando cliente",
+        success: {
+          render() {
+            return "Cliente cadastrado com sucesso!";
+          },
+        },
+        error: {
+          render({ data }: any) {
+            if (data as AxiosError) {
+              console.error(data);
+              return `${data.response.data.message}`;
+            }
+          },
+        },
+      }
+    );
   }
 
   return (

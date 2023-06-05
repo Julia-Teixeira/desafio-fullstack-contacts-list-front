@@ -11,8 +11,9 @@ import {
 import { useRouter } from "next/navigation";
 import { ContactRegisterData } from "./validator";
 import { RegisterData } from "@/provider/authProvider/validator";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Toast from "@/components/toast";
+import { ToastContentProps, toast } from "react-toastify";
 import { AxiosError } from "axios";
 
 interface ClientContextValues {
@@ -20,11 +21,25 @@ interface ClientContextValues {
   contacts: Contact[] | null;
   setClient: Dispatch<SetStateAction<Client | null>>;
   loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
   getClientData: () => Promise<void>;
-  deleteContact: (id: string) => Promise<void>;
-  registerContact: (data: ContactRegisterData) => Promise<void>;
-  editContact: (id: string, data: ContactRegisterData) => Promise<void>;
-  editClient: (data: RegisterData) => Promise<void>;
+  deleteContact: (
+    id: string,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) => Promise<void>;
+  registerContact: (
+    data: ContactRegisterData,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) => Promise<void>;
+  editContact: (
+    id: string,
+    data: ContactRegisterData,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) => Promise<void>;
+  editClient: (
+    data: RegisterData,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) => Promise<void>;
 }
 
 export const ClientContext = createContext<ClientContextValues>(
@@ -57,142 +72,170 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
   }, []);
 
   async function getClientData() {
-    try {
-      const response = await api.get("/client");
-      setClient(response.data);
-      setContacts(response.data.contacts);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    await api
+      .get("/client")
+      .then((res) => {
+        setClient(res.data);
+        setContacts(res.data.contacts);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err.response.data.message);
+        Toast({ msg: err.response.data.message, isSuccess: false });
+        router.push("/");
+      })
+      .finally(() => setLoading(false));
   }
 
-  async function editClient(data: RegisterData) {
-    try {
-      await api.patch(`/client`, data);
-      toast.success("Usuário editado com sucesso!", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    } catch (error: any) {
-      const err = error as AxiosError;
+  async function editClient(
+    data: RegisterData,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) {
+    setLoading(true);
+    const fd = new FormData();
+    fd.append("full_name", data.full_name);
+    fd.append("phone", data.phone);
+    fd.append("email", data.email);
+    fd.append("password", data.password);
+    fd.append("image", data.image);
 
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    toast.promise(
+      api.patch(`/client`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
+      {
+        pending: "Editando cliente...",
+        success: {
+          render() {
+            getClientData();
+            setIsOpen(false);
+            return "Cliente editado com sucesso!";
+          },
+        },
+        error: {
+          render({ data }: any) {
+            if (data as AxiosError) {
+              console.error(data);
+              return `${data.response.data.message}`;
+            }
+          },
+        },
+      }
+    );
+
+    // await api
+    // .patch(`/client`, fd, {
+    //   headers: { "Content-Type": "multipart/form-data" },
+    // })
+    // .then((_) => {
+    //   Toast({ msg: "Dados Alterado com sucesso!", isSuccess: true });
+    //   getClientData();
+    //   setLoading(false);
+    // })
+    // .catch((err) => {
+    //   console.error(err.response.data.message);
+    //   Toast({ msg: err.response.data.message, isSuccess: false });
+    // })
+    // .finally(() => setLoading(false));
   }
 
-  async function deleteContact(id: string) {
-    try {
-      await api.delete(`/contact/${id}`);
-      toast.success("Contato deletado com sucesso!", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    } catch (error: any) {
-      const err = error as AxiosError;
-
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  async function deleteContact(
+    id: string,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) {
+    toast.promise(api.delete(`/contact/${id}`), {
+      pending: "Deletando contato...",
+      success: {
+        render() {
+          getClientData();
+          setIsOpen(false);
+          return "Contato deletado com sucesso!";
+        },
+      },
+      error: {
+        render({ data }: any) {
+          if (data as AxiosError) {
+            console.error(data);
+            setIsOpen(false);
+            return `${data.response.data.message}`;
+          }
+        },
+      },
+    });
   }
 
-  async function registerContact(data: ContactRegisterData) {
-    try {
-      const response = await api.post(`/contact/`, data);
-      toast.success("Contato cadastrado com sucesso!", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    } catch (error: any) {
-      const err = error as AxiosError;
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  async function registerContact(
+    data: ContactRegisterData,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) {
+    setLoading(true);
+    const fd = new FormData();
+    fd.append("full_name", data.full_name);
+    fd.append("phone", data.phone);
+    fd.append("email", data.email);
+    fd.append("image", data.image);
+
+    toast.promise(
+      api.post(`/contact/`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
+      {
+        pending: "Criando contato...",
+        success: {
+          render() {
+            getClientData();
+            setIsOpen(false);
+            return "Contato criado com sucesso!";
+          },
+        },
+        error: {
+          render({ data }: any) {
+            if (data as AxiosError) {
+              console.error(data);
+              return `${data.response.data.message}`;
+            }
+          },
+        },
+      }
+    );
   }
 
-  async function editContact(id: string, data: ContactRegisterData) {
-    try {
-      await api.patch(`/contact/${id}`, data);
-      toast.success("Contato editado com sucesso!", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    } catch (error: any) {
-      const err = error as AxiosError;
+  async function editContact(
+    id: string,
+    data: ContactRegisterData,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
+  ) {
+    const fd = new FormData();
+    fd.append("full_name", data.full_name);
+    fd.append("phone", data.phone);
+    fd.append("email", data.email);
+    fd.append("image", data.image);
 
-      toast.error(err.message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    toast.promise(
+      api.patch(`/contact/${id}`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
+      {
+        pending: "Alterando dados",
+        success: {
+          render() {
+            getClientData();
+            setIsOpen(false);
+            return "Dados alterados com sucesso!";
+          },
+        },
+        error: {
+          render({ data }: any) {
+            if (data as AxiosError) {
+              console.error(data);
+              setIsOpen(false);
+              return `${data.response.data.message}`;
+            }
+          },
+        },
+      }
+    );
   }
 
   return (
@@ -201,6 +244,7 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
         client,
         contacts,
         loading,
+        setLoading,
         setClient,
         getClientData,
         deleteContact,

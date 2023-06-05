@@ -15,14 +15,10 @@ export function ModalDeleteContact({
   setIsOpen,
   contact,
 }: ModalDeleteContactProps) {
-  const { getClientData, deleteContact } = useClient();
+  const { getClientData, deleteContact, loading } = useClient();
 
   function deleteContacts() {
-    deleteContact(contact.id);
-    getClientData();
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 2000);
+    deleteContact(contact.id, setIsOpen);
   }
   return (
     <ModalContainer
@@ -30,23 +26,22 @@ export function ModalDeleteContact({
       setIsOpen={setIsOpen}
       titleModal="Deletar Contato"
     >
-      <div className="flex flex-col items-center gap-[61px] mt-[35px]">
-        <h1 className="text-purple800 text-2xl font-semibold">
+      <div className="flex flex-col items-center gap-8 mt-[35px]">
+        <h1 className="text-purple800 text-1xl lg:text-2xl font-semibold">
           Deseja realmente excluir <br /> o contato {contact.full_name}?
         </h1>
-        <div className="flex gap-[30px]">
+        <div className="flex gap-6 flex-col lg:flex-row">
           <Button
             text="Sim"
             type="button"
+            loading={loading}
             onClick={() => deleteContacts()}
-            w="w-[160px]"
             color="bg-[--color-purple-600]"
           />
           <Button
             text="Não"
             type="button"
             onClick={() => setIsOpen(false)}
-            w="w-[160px]"
             color="bg-[--color-purple-600]"
           />
         </div>

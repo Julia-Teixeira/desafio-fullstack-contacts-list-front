@@ -31,14 +31,15 @@ export function ModalContainer({
         content: {
           borderRadius: "10px",
           padding: "20px",
+          margin: "20px",
           width: "fit-content",
           height: "fit-content",
         },
       }}
       className="bg-purple-100"
     >
-      <header className="flex justify-between items-center text-2xl text-purple800 mb-[16px] cursor-pointer">
-        {titleModal ? <h1> {titleModal} </h1> : null}
+      <header className="flex justify-between items-center md:text-1xl text-purple800 mb-2 cursor-pointer">
+        {titleModal ? <h1 className="text-lg"> {titleModal} </h1> : null}
         <AiOutlineCloseCircle onClick={() => setIsOpen(false)} size={"34px"} />
       </header>
       {children}
